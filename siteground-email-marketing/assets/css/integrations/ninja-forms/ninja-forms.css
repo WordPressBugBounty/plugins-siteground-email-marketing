@@ -1,0 +1,24 @@
+div.nf-setting:has(#sgwpmail_consent_checkbox_status) {
+    display: none;
+}
+.sgwpmail-enabled .enabled {
+    color: green;
+    font-weight: bold;
+}
+    .sgwpmail-disabled .disabled {
+    color: red;
+    font-weight: bold;
+}
+span.sgwpmail-help {
+    font-size: small;
+    font-style: italic;
+    color: #7c7c7c;
+}
+
+div.nf-setting:has( #sgwpmail_groups_value ) {
+    display:none;
+}
+
+.nf-item[data-id^='sgwpmail_checkbox'] {
+    padding-left: 35px;
+}

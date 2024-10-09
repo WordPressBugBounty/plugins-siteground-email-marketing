@@ -1,0 +1,13 @@
+.gfield--type-sgwpmail .ginput_container {
+    display: inline-grid;
+    gap: var(--gf-field-choice-meta-space, var(--gform-theme-field-choice-meta-spacing)) 0;
+    grid-template-columns: minmax(var(--gf-ctrl-choice-size, var(--gform-theme-control-choice-size)), max-content) auto;
+}
+
+.sg-email-marketing-checkbox-enabled .ginput_container {
+    display: block; 
+}
+
+#preview_form_container .gfield--type-sgwpmail .ginput_container {
+    display: block; 
+}
