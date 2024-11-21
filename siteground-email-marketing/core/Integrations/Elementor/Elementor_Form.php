@@ -31,14 +31,14 @@ class Elementor_Form extends Integrations {
 			array(
 				'enabled'       => class_exists( '\Elementor\Plugin' ) ? 1 : 2,
 				'labels'        => array(),
-				'checkbox_text' => __( 'Sign me up for the newsletter!', 'siteground-email-marketing' ),
+				'checkbox_text' => 'Sign me up for the newsletter!',
 				'system'        => 1,
 				'name'          => $this->id,
 			)
 		);
 
-		$settings['title']       = __( 'Elementor', 'siteground-email-marketing' );
-		$settings['description'] = __( 'Add your lead generating forms by using the dedicated SiteGround Email Marketing block within Elementor.', 'siteground-email-marketing' );
+		$settings['title']       = 'Elementor';
+		$settings['description'] = 'Add your lead generating forms by using the dedicated SiteGround Email Marketing block within Elementor.';
 
 		return $settings;
 	}

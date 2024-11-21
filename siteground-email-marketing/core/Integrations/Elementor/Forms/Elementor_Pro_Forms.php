@@ -32,14 +32,14 @@ class Elementor_Pro_Forms extends Integrations {
 			array(
 				'enabled'       => class_exists( '\ElementorPro\Plugin' ) ? 1 : 2,
 				'labels'        => array(),
-				'checkbox_text' => __( 'Sign me up for the newsletter!', 'siteground-email-marketing' ),
+				'checkbox_text' => 'Sign me up for the newsletter!',
 				'system'        => 1,
 				'name'          => $this->id,
 			)
 		);
 
-		$settings['title']       = __( 'Elementor Pro Forms', 'siteground-email-marketing' );
-		$settings['description'] = __( 'Add an optional checkbox to any form created with Elementor Pro, enabling users to sign up for your mailing list. Enable this integration by adding action after submit "SG Email Marketing" in Elementor Pro forms settings.', 'siteground-email-marketing' );
+		$settings['title']       = 'Elementor Pro Forms';
+		$settings['description'] = 'Add an optional checkbox to any form created with Elementor Pro, enabling users to sign up for your mailing list. Enable this integration by adding action after submit "SG Email Marketing" in Elementor Pro forms settings.';
 
 		return $settings;
 	}

@@ -34,14 +34,14 @@ class GravityForms extends Integrations {
 			array(
 				'enabled'       => class_exists( '\GFForms' ) ? 1 : 2,
 				'labels'        => array(),
-				'checkbox_text' => __( 'Sign me up for the newsletter!', 'siteground-email-marketing' ),
+				'checkbox_text' => 'Sign me up for the newsletter!',
 				'system'        => 1,
 				'name'          => $this->id,
 			)
 		);
 
-		$settings['title']       = __( 'Gravity Forms', 'siteground-email-marketing' );
-		$settings['description'] = __( 'Add an optional checkbox to any form created with Gravity Forms, enabling users to sign up for your mailing list. Enable this feature by adding the SG Email Marketing building block to any form created with Gravity Forms.', 'siteground-email-marketing' );
+		$settings['title']       = 'Gravity Forms';
+		$settings['description'] = 'Add an optional checkbox to any form created with Gravity Forms, enabling users to sign up for your mailing list. Enable this feature by adding the SG Email Marketing building block to any form created with Gravity Forms.';
 
 		return $settings;
 	}

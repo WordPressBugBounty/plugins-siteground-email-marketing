@@ -44,14 +44,14 @@ class WPForms extends \SG_Email_Marketing\Integrations\Integrations {
 			array(
 				'enabled'       => class_exists( '\WPForms_Field' ) ? 1 : 2,
 				'labels'        => array(),
-				'checkbox_text' => __( 'Sign me up for the newsletter!', 'siteground-email-marketing' ),
+				'checkbox_text' => 'Sign me up for the newsletter!',
 				'system'        => 1,
 				'name'          => $this->id,
 			)
 		);
 
-		$settings['title']       = __( 'WPForms', 'siteground-email-marketing' );
-		$settings['description'] = __( 'Add an optional checkbox to any form created with WPForms, enabling users to sign up for your mailing list. Enable this feature by adding the SG Email Marketing building block to any WPForms form.', 'siteground-email-marketing' );
+		$settings['title']       = 'WPForms';
+		$settings['description'] = 'Add an optional checkbox to any form created with WPForms, enabling users to sign up for your mailing list. Enable this feature by adding the SG Email Marketing building block to any WPForms form.';
 
 		return $settings;
 	}

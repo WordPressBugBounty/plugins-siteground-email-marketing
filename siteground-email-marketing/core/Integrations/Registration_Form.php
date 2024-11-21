@@ -26,14 +26,14 @@ class Registration_Form extends Integrations {
 			array(
 				'enabled'       => 0,
 				'labels'        => array(),
-				'checkbox_text' => __( 'Sign me up for the newsletter!', 'siteground-email-marketing' ),
+				'checkbox_text' => 'Sign me up for the newsletter!',
 				'system'        => 0,
 				'name'          => $this->id,
 			)
 		);
 
-		$settings['title']       = __( 'Default Registration Page', 'siteground-email-marketing' );
-		$settings['description'] = __( 'Add an optional checkbox to the default WordPress registration page, enabling users to sign up for your mailing list.', 'siteground-email-marketing' );
+		$settings['title']       = 'Default Registration Page';
+		$settings['description'] = 'Add an optional checkbox to the default WordPress registration page, enabling users to sign up for your mailing list.';
 
 		return $settings;
 	}

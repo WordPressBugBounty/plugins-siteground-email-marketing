@@ -26,14 +26,14 @@ class Comment_Form extends Integrations {
 			array(
 				'enabled'       => 0,
 				'labels'        => array(),
-				'checkbox_text' => __( 'Sign me up for the newsletter!', 'siteground-email-marketing' ),
+				'checkbox_text' => 'Sign me up for the newsletter!',
 				'system'        => 0,
 				'name'          => $this->id,
 			)
 		);
 
-		$settings['title']       = __( 'Default Comment Form', 'siteground-email-marketing' );
-		$settings['description'] = __( 'Add an optional checkbox to the default WordPress comment form, enabling visitors who comment on your site to subscribe.', 'siteground-email-marketing' );
+		$settings['title']       = 'Default Comment Form';
+		$settings['description'] = 'Add an optional checkbox to the default WordPress comment form, enabling visitors who comment on your site to subscribe.';
 
 		return $settings;
 	}

@@ -52,14 +52,14 @@ class Gutenberg extends Integrations {
 			array(
 				'enabled' => version_compare( $GLOBALS['wp_version'], '5.0-beta', '>' ) ? 1 : 0,
 				'labels' => array(),
-				'checkbox_text' => __( 'Sign me up for the newsletter!', 'siteground-email-marketing' ),
+				'checkbox_text' => 'Sign me up for the newsletter!',
 				'system' => 1,
 				'name' => $this->id,
 			)
 		);
 
-		$settings['title'] = __( 'Gutenberg', 'siteground-email-marketing' );
-		$settings['description'] = __( 'Add your lead generating forms by using the dedicated SiteGround Email Marketing block within Gutenberg.', 'siteground-email-marketing' );
+		$settings['title'] = 'Gutenberg';
+		$settings['description'] = 'Add your lead generating forms by using the dedicated SiteGround Email Marketing block within Gutenberg.';
 
 		return $settings;
 	}

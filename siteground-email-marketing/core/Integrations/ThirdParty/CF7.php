@@ -52,14 +52,14 @@ class CF7 extends \SG_Email_Marketing\Integrations\Integrations {
 			array(
 				'enabled'       => 1,
 				'labels'        => array(),
-				'checkbox_text' => __( 'Sign me up for the newsletter!', 'siteground-email-marketing' ),
+				'checkbox_text' => 'Sign me up for the newsletter!',
 				'system'        => 1,
 				'name'          => $this->id,
 			)
 		);
 
-		$settings['title']       = __( 'Contact Form 7', 'siteground-email-marketing' );
-		$settings['description'] = __( 'Add an optional checkbox to any form created with Contact Form 7, enabling users to sign up for your mailing list. Enable this feature from the SG Email Marketing tab in Contact Form 7 when editing an existing form.', 'siteground-email-marketing' );
+		$settings['title']       = 'Contact Form 7';
+		$settings['description'] = 'Add an optional checkbox to any form created with Contact Form 7, enabling users to sign up for your mailing list. Enable this feature from the SG Email Marketing tab in Contact Form 7 when editing an existing form.';
 		$settings['enabled']     = ! class_exists( '\WPCF7' ) ? 2 : $settings['enabled'];
 
 		return $settings;

@@ -31,14 +31,14 @@ class NinjaForms extends Integrations {
 			array(
 				'enabled'       => class_exists( '\NF_Abstracts_ActionNewsletter' ) ? 1 : 2,
 				'labels'        => array(),
-				'checkbox_text' => __( 'Sign me up for the newsletter!', 'siteground-email-marketing' ),
+				'checkbox_text' => 'Sign me up for the newsletter!',
 				'system'        => 1,
 				'name'          => $this->id,
 			)
 		);
 
-		$settings['title']       = __( 'Ninja Forms', 'siteground-email-marketing' );
-		$settings['description'] = __( 'Add an optional checkbox to any form created with Ninja Forms, enabling users to sign up for your mailing list. Enable this integration by adding the action "SG Email Marketing" in Ninja Form settings.', 'siteground-email-marketing' );
+		$settings['title']       = 'Ninja Forms';
+		$settings['description'] = 'Add an optional checkbox to any form created with Ninja Forms, enabling users to sign up for your mailing list. Enable this integration by adding the action "SG Email Marketing" in Ninja Form settings.';
 
 		return $settings;
 	}
