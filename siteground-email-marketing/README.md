@@ -2,7 +2,7 @@ Contributors: Hristo-Sg, siteground, sstoqnov, stoyangeorgiev, elenachavdarova, 
 Tags: leads, lead generation, growth, subscription
 Requires at least: 4.7
 Requires PHP: 7.0
-Tested up to: 6.7
+Tested up to: 6.8
 Stable tag: 1.6.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
