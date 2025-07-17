@@ -1,0 +1,6 @@
+<svg id="uuid-ad3f1bbd-3274-4aaa-a7b5-0a5b194e5712" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 48">
+    <rect x="9.69" y="4.18" width="32.92" height="28.3" rx="2" ry="2" class="sgmaincolor"/>
+    <path d="M40.61,37.2H11.69c-1.1,0-2,.9-2,2v7.73h32.92v-7.73c0-1.1-.9-2-2-2Z" class="sgmaincolor"/>
+    <rect x="47.53" y="4.38" width="32.92" height="13.96" rx="2" ry="2" class="sgmaincolor"/>
+    <path d="M80.36,25.05c0-1.1-.9-2-2-2h-28.92c-1.1,0-2,.9-2,2v22h32.92v-22Z" class="sgmaincolor"/>
+</svg>

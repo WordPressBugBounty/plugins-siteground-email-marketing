@@ -168,9 +168,7 @@ class Renderer {
 		if ( isset( $fields->title ) && is_array( $fields->title ) ) {
 			foreach ( $fields->title as $title_field ) {
 
-				$required = ! empty( $title_field->required ) ? 'required' : '';
-
-				if ( empty( $required ) ) {
+				if ( empty( $title_field->visible ) ) {
 					continue;
 				}
 
@@ -189,13 +187,13 @@ class Renderer {
 
 		// Define the order of the fields.
 		$field_order = array( 'first-name', 'last-name', 'email' );
-
+		$html .= '<div class="sg-input-grid">';
 		foreach ( $field_order as $field_name ) {
 			foreach ( $fields->fields as $field ) {
 				if ( $field->{'sg-form-type'} === $field_name ) {
 					$required = ! empty( $field->required ) ? 'required' : '';
 
-					if ( empty( $required ) ) {
+					if ( empty( $field->required ) && empty( $field->visible ) ) {
 						continue;
 					}
 
@@ -203,6 +201,7 @@ class Renderer {
 						continue;
 					}
 
+					// The HTML for name, last name, email fields.
 					$html .= '<div class="sg-input-container">';
 					if ( ! empty( $field->label ) ) {
 						$html .= '<label for="input-' . esc_attr( $field->id ) . $attr['hash'] . '"> ' . $field->label;
@@ -216,6 +215,12 @@ class Renderer {
 				}
 			}
 		}
+
+		// Render the custom fields if any.
+		if ( isset( $fields->{'custom-fields'} ) && is_array( $fields->{'custom-fields'} ) ) {
+			$html .= $this->render_custom_fields( $fields->{'custom-fields'}, $attr['hash'] );
+		}
+		$html .= '</div>';
 
 		if ( isset( $fields->consent ) && isset( $fields->consent->consent_visible ) && 1 === $fields->consent->consent_visible ) {
 			$html .= '<div class="sg-consent-container sg-input-container">';
@@ -398,5 +403,116 @@ class Renderer {
 		}
 
 		return $this->render( $atts['id'], array( 'formId' => $atts['id'] ) );
+	}
+
+	/**
+	 * Renders the custom fields.
+	 *
+	 * @param array $custom_fields The list of custom fields.
+	 *
+	 * @param string $hash The unique hash string.
+	 *
+	 * @return string $html The HTML for the custom fields.
+	 */
+	public function render_custom_fields( $custom_fields, $hash ) {
+		$html = '';
+
+		foreach ( $custom_fields as $field ) {
+			// Cast the field object into array.
+			$field = (array) $field;
+
+			$required = ! empty( $field['required'] ) ? 'required' : '';
+
+			$html .= '<div class="sg-input-container">';
+
+			// Label
+			if ( ! empty( $field['label'] ) ) {
+				$html .= $this->render_label( $field, $hash, $required );
+			}
+
+			// Render the dropdown.
+			if ( 'dropdown' === $field['type'] && ! empty( $field['options'] ) ) {
+				$html .= $this->render_dropdown( $field, $hash, $required );
+			}
+
+			// Render text field.
+			if ( 'text' === $field['type'] ) {
+				$html .= $this->render_text_input( $field, $hash, $required );
+			}
+
+			// Hidden input with the custom field id.
+			$html .= '<input type="hidden" name="' . esc_attr( $field['sg-form-type'] ) . '" value="' . esc_attr( $field['cf-id'] ) . '">';
+
+			$html .= '<span class="sg-marketing-form-sublabel"></span>';
+			$html .= '</div>';
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Renders the label element for a custom field.
+	 *
+	 * @param array $field    The custom field array.
+	 *
+	 * @param string $hash     The unique hash string.
+	 *
+	 * @param string $required The required attribute.
+	 *
+	 * @return string $html    The rendered label HTML.
+	 */
+	public function render_label( $field, $hash, $required ) {
+		$html = '<label for="input-' . esc_attr( $field['id'] ) . $hash . '"> ' . esc_html( $field['label'] );
+		$html .= ( $required ? ' <span class="sg-marketing-form-required-label" aria-hidden="true">*</span>' : '' );
+		$html .= '</label>';
+
+		return $html;
+	}
+
+	/**
+	 * Renders a <select> element for a custom field of type 'dropdown'.
+	 *
+	 * @param array $field    The custom field array.
+	 *
+	 * @param string $hash     The unique hash string.
+	 *
+	 * @param string $required The required attribute.
+	 *
+	 * @return string $html    The rendered label HTML.
+	 */
+	public function render_dropdown( $field, $hash, $required ) {
+		$html = '<select id="input-' . esc_attr( $field['id'] ) . $hash . '" name="' . esc_attr( $field['type'] ) . '" ' . esc_attr( $required ) . '>';
+
+		if ( ! empty( $field['placeholder'] ) ) {
+			$html .= '<option value="" selected disabled hidden>' . esc_html( $field['placeholder'] ) . '</option>';
+		}
+
+		foreach ( $field['options'] as $option ) {
+			$option = (array) $option; // Convert option object to array.
+			$html .= '<option value="' . esc_attr( $option['id'] ) . '">' . esc_html( $option['name'] ) . '</option>';
+		}
+
+		$html .= '</select>';
+
+		return $html;
+	}
+
+
+	/**
+	 * Renders a text input for a custom field of type 'text'.
+	 *
+	 * @param array $field    The custom field array.
+	 *
+	 * @param string $hash     The unique hash string.
+	 *
+	 * @param string $required The required attribute.
+	 *
+	 * @return string $html    The rendered label HTML.
+	 */
+	public function render_text_input( $field, $hash, $required ) {
+		$html = '<input id="input-' . esc_attr( $field['id'] ) . $hash . '" type="' . esc_attr( $field['type'] ) . '"
+		name="' . esc_attr( $field['type'] ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '" ' . esc_attr( $required ) . '>';
+
+		return $html;
 	}
 }

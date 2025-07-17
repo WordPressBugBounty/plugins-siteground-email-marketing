@@ -83,6 +83,7 @@ class Forms {
 
 
 	public function process_form( $form_data ) {
+
 		$form        = get_post( $form_data['form-id'] );
 		$form_schema = json_decode( $form->post_content, true );
 		$consent_checked = ! empty( $form_data['sg-marketing-form-checkbox'] ) ? true: false;
@@ -110,6 +111,12 @@ class Forms {
 			$data[ lcfirst(str_replace( '-', '', ucwords( $field['sg-form-type'], '-' ) )) ] = $field_value;
 		}
 
+		// Custom fields logic here.
+		if ( isset( $form_schema['custom-fields'] ) && is_array( $form_schema['custom-fields'] ) ) {
+			$data['contactCustomFields'] = $this->process_custom_fields( $form_schema['custom-fields'], $form_data );
+		}
+
+		// Consent logic here.
 		if ( ! empty( $form_schema['consent']['consent_visible'] )) {
 			if ( ! empty( $form_schema['consent'] ) && ! empty( $form_schema['consent']['consent_checkbox'] ) && ! $consent_checked ) {
 				return;
@@ -119,7 +126,6 @@ class Forms {
 		if ( ! empty( $errors ) ) {
 			return $errors;
 		}
-
 
 		$labels = array_map( function( $label ) {
 			return $label['id'];
@@ -136,5 +142,42 @@ class Forms {
 		} catch ( \Exception $e ) {
 			return array( 'general_error' => $e->getMessage() );
 		}
+	}
+
+	/**
+	 * Extract and prepare the custom fields data.
+	 *
+	 * @param array $custom_fields The custom field schema.
+	 *
+	 * @param array $form_data The submitted form data.
+	 *
+	 * @return array The structured custom fields data.
+	 */
+	public function process_custom_fields( $custom_fields, $form_data ) {
+		$custom_fields_data = array();
+
+		foreach ( $custom_fields as $field ) {
+			if ( 'dropdown' === $field['type'] ) {
+				$custom_dropdown = isset( $form_data[ $field['sg-form-type'] ] ) ? trim( $form_data[ $field['sg-form-type'] ] ) : null;
+				$option = isset( $form_data[ $field['type'] ] ) ? trim( $form_data[ $field['type'] ] ) : null;
+
+				$custom_fields_data[] = array(
+					'customField'       => $custom_dropdown,
+					'customFieldOption' => $option,
+				);
+			}
+
+			if ( 'text' === $field['type'] ) {
+				$custom_text = isset( $form_data[ $field['sg-form-type'] ] ) ? trim( $form_data[ $field['sg-form-type'] ] ) : null;
+				$text = isset( $form_data[ $field['type'] ] ) ? trim( $form_data[ $field['type'] ] ) : null;
+
+				$custom_fields_data[] = array(
+					'customField'           => $custom_text,
+					'customFieldOptionText' => $text,
+				);
+			}
+		}
+
+		return $custom_fields_data;
 	}
 }

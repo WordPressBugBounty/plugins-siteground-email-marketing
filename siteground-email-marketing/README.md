@@ -3,7 +3,7 @@ Tags: leads, lead generation, growth, subscription
 Requires at least: 4.7
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 1.6.4
+Stable tag: 1.7.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -45,6 +45,11 @@ Our plugin uses a cookie in order to function properly. It does not store person
 1. Start Collecting Leads: Once your integrations and forms are set up, you can start collecting leads and growing your email list.
 
 == Changelog ==
+= Version 1.7.0 =
+Release Date: Jul 17th, 2025
+* Native forms can now support custom fields
+* Interface improvements for the plugin's settings and native form builder
+
 = Version 1.6.4 =
 Relase Date: Nov 21st, 2024
 

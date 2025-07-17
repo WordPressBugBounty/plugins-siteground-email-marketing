@@ -86,22 +86,47 @@
     var(--sg-email-marketing-form-form-size-field-padding-h);
 }
 
-.sg-marketing-form-container .sg-input-container input {
+.sg-marketing-form-container .sg-input-container select {
+  width: 100%;
+  color: var(--sg-email-marketing-form-field-text-color);
+  height: var(--sg-email-marketing-form-form-size-field-input-height);
+  font-size: var(--sg-email-marketing-form-form-size-field-input-font-size);
+  border: 1px solid var(--sg-email-marketing-form-field-border-color);
+  border-radius: var(--sg-email-marketing-form-field-border-radius);
+  background-color: var(--sg-email-marketing-form-field-background-color);
+  padding: calc( var(--sg-email-marketing-form-form-size-field-padding-v) - 3px )
+    calc( var(--sg-email-marketing-form-form-size-field-padding-h) - 3px );
+}
+
+.editor-styles-wrapper .sg-marketing-form-container .sg-input-container select {
+  min-width: 100%;
+  line-height: 1.25;
+}
+.sg-marketing-form-container .sg-input-grid {
+  margin: 15px 0px; 
+}
+
+.sg-marketing-form-container .sg-input-container input,
+.sg-marketing-form-container .sg-input-container select {
   transition: box-shadow 0.2s ease-in-out;
 }
 
-.sg-marketing-form-container .sg-input-container input:hover {
+.sg-marketing-form-container .sg-input-container input:hover,
+.sg-marketing-form-container .sg-input-container select:hover {
   box-shadow: inset 0px 0px 0px 2px
     var(--sg-email-marketing-form-field-border-color);
 }
 
-.sg-marketing-form-container .sg-input-container input:focus {
+.sg-marketing-form-container .sg-input-container input:focus,
+.sg-marketing-form-container .sg-input-container select:focus {
+
   outline: none;
   box-shadow: inset 0px 0px 0px 1px
     var(--sg-email-marketing-form-field-border-color);
 }
 
-.sg-marketing-form-container .sg-input-container input::placeholder {
+.sg-marketing-form-container .sg-input-container input::placeholder,
+.sg-marketing-form-container .sg-input-container select:has(option:disabled:checked[hidden]) {
   color: var(--sg-email-marketing-form-field-placeholder-color);
 }
 
@@ -171,7 +196,7 @@
 /* Vertical/Column layout
     ========================================================================== */
 
-.sg-marketing-form-container.sg-marketing-form-container-column {
+.sg-marketing-form-container .sg-input-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(max(260px, 40%), 1fr));
   gap: 30px;
@@ -179,16 +204,21 @@
   width: 100%;
 }
 
+.sg-marketing-form-container.sg-marketing-form-container-column {
+  display: grid;
+}
+.sg-marketing-form-container .sg-input-grid {
+  grid-column: 1 / -1;
+}
 
 .sg-marketing-form-container.sg-marketing-form-container-column
   .sg-marketing-form-title-and-description-fields {
   grid-column: 1 / -1;
 }
 
-.sg-marketing-form-container.sg-marketing-form-container-column
-  .sg-input-container:nth-child(4) {
+.sg-marketing-form-container.sg-marketing-form-container-column .sg-input-grid
+  .sg-input-container {
   grid-column: 1 / -1;
-  /* This will make the fourth input field span the entire width of the grid on the second row*/
 }
 
 .sg-marketing-form-container.sg-marketing-form-container-column button {

@@ -192,6 +192,7 @@ class Mailer_Api {
 	 * @return array            $data     The prepared data.
 	 */
 	public function prepare_response( $response, $type = false ) {
+
 		$status_code = wp_remote_retrieve_response_code( $response );
 		$api_message = wp_remote_retrieve_response_message( $response );
 
@@ -200,8 +201,8 @@ class Mailer_Api {
 			'message' => $api_message,
 		);
 
-		// Add data only if we are calling the labels, and the account is not suspended. In all other cases, the data will be present.
-		if ( 'labels' === $type && 401 !== $status_code ) {
+		// Add data only if we are calling the labels/custom_fields, and the account is not suspended. In all other cases, the data will be present.
+		if ( ( 'labels' === $type || 'custom_fields' === $type ) && 401 !== $status_code ) {
 			$data['data'] = json_decode( wp_remote_retrieve_body( $response ), true );
 		}
 
@@ -308,5 +309,27 @@ class Mailer_Api {
 		}
 
 		return 'unknown';
+	}
+
+	/**
+	 * Get custom fields.
+	 */
+	public function get_custom_fields() {
+
+		if ( ! $this->token ) {
+			return array();
+		}
+
+		return $this->prepare_response(
+			$this->call(
+				'/custom_fields/full_list',
+				array(
+					'pagination' => 'false',
+					'token'      => $this->token,
+					'type'       => 'manual',
+				)
+			),
+			'custom_fields'
+		);
 	}
 }

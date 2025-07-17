@@ -9,6 +9,10 @@ jQuery(document).ready(function ($) {
       return;
     }
 
+    if( !$input.prop('required')) {
+      return;
+    }
+
     const $sublabel = $input.siblings(".sg-marketing-form-sublabel");
 
     if ($input.val() === "") {

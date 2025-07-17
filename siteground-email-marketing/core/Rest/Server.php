@@ -9,6 +9,7 @@ use SG_Email_Marketing\Rest\Controllers\v1\Pages\Dashboard;
 use SG_Email_Marketing\Rest\Controllers\v1\Pages\Forms;
 use SG_Email_Marketing\Rest\Controllers\v1\Pages\Settings;
 use SG_Email_Marketing\Rest\Controllers\v1\Labels;
+use SG_Email_Marketing\Rest\Controllers\v1\Custom_Fields;
 use SG_Email_Marketing\Rest\Controllers\v1\Integrations\CF7;
 
 defined( 'ABSPATH' ) || exit;
@@ -34,12 +35,14 @@ class Server {
 		$forms_page      = new Forms();
 		$settings_page   = new Settings();
 		$labels          = new Labels();
+		$custom_fields   = new Custom_Fields();
 		$cf7_integration = new CF7();
 
 		$dashboard->register_rest_routes();
 		$forms_page->register_routes();
 		$settings_page->register_rest_routes();
 		$labels->register_rest_routes();
+		$custom_fields->register_rest_routes();
 		$cf7_integration->register_rest_routes();
 	}
 }
