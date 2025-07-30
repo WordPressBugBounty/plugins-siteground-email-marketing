@@ -168,7 +168,7 @@ class Renderer {
 		if ( isset( $fields->title ) && is_array( $fields->title ) ) {
 			foreach ( $fields->title as $title_field ) {
 
-				if ( empty( $title_field->visible ) ) {
+				if ( empty( $title_field->required ) && empty( $field->visible ) ) {
 					continue;
 				}
 
@@ -441,7 +441,7 @@ class Renderer {
 			}
 
 			// Hidden input with the custom field id.
-			$html .= '<input type="hidden" name="' . esc_attr( $field['sg-form-type'] ) . '" value="' . esc_attr( $field['cf-id'] ) . '">';
+			$html .= '<input type="hidden" name="' . esc_attr( $field['sg-form-type'] ) . '-' . esc_attr( $field['id'] ) . '" value="' . esc_attr( $field['cf-id'] ) . '">';
 
 			$html .= '<span class="sg-marketing-form-sublabel"></span>';
 			$html .= '</div>';
@@ -481,7 +481,7 @@ class Renderer {
 	 * @return string $html    The rendered label HTML.
 	 */
 	public function render_dropdown( $field, $hash, $required ) {
-		$html = '<select id="input-' . esc_attr( $field['id'] ) . $hash . '" name="' . esc_attr( $field['type'] ) . '" ' . esc_attr( $required ) . '>';
+		$html = '<select id="input-' . esc_attr( $field['id'] ) . $hash . '" name="' . esc_attr( $field['type'] ) . '-' . esc_attr( $field['id'] ) . '" ' . esc_attr( $required ) . '>';
 
 		if ( ! empty( $field['placeholder'] ) ) {
 			$html .= '<option value="" selected disabled hidden>' . esc_html( $field['placeholder'] ) . '</option>';
@@ -511,7 +511,7 @@ class Renderer {
 	 */
 	public function render_text_input( $field, $hash, $required ) {
 		$html = '<input id="input-' . esc_attr( $field['id'] ) . $hash . '" type="' . esc_attr( $field['type'] ) . '"
-		name="' . esc_attr( $field['type'] ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '" ' . esc_attr( $required ) . '>';
+		name="' . esc_attr( $field['type'] ) . '-' . esc_attr( $field['id'] ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '" ' . esc_attr( $required ) . '>';
 
 		return $html;
 	}

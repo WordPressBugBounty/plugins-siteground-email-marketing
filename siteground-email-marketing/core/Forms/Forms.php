@@ -157,22 +157,26 @@ class Forms {
 		$custom_fields_data = array();
 
 		foreach ( $custom_fields as $field ) {
+			// Generate the field names, based on the render's structure.
+			$field_hidden_name = $field['sg-form-type'] . '-' . $field['id'];
+			$field_input_name = $field['type'] . '-' . $field['id'];
+
 			if ( 'dropdown' === $field['type'] ) {
-				$custom_dropdown = isset( $form_data[ $field['sg-form-type'] ] ) ? trim( $form_data[ $field['sg-form-type'] ] ) : null;
-				$option = isset( $form_data[ $field['type'] ] ) ? trim( $form_data[ $field['type'] ] ) : null;
+				$custom_dropdown_id = isset( $form_data[ $field_hidden_name ] ) ? trim( $form_data[ $field_hidden_name ] ) : null;
+				$option_id = isset( $form_data[ $field_input_name ] ) ? trim( $form_data[ $field_input_name ] ) : null;
 
 				$custom_fields_data[] = array(
-					'customField'       => $custom_dropdown,
-					'customFieldOption' => $option,
+					'customField'       => $custom_dropdown_id,
+					'customFieldOption' => $option_id,
 				);
 			}
 
 			if ( 'text' === $field['type'] ) {
-				$custom_text = isset( $form_data[ $field['sg-form-type'] ] ) ? trim( $form_data[ $field['sg-form-type'] ] ) : null;
-				$text = isset( $form_data[ $field['type'] ] ) ? trim( $form_data[ $field['type'] ] ) : null;
+				$custom_text_id = isset( $form_data[ $field_hidden_name ] ) ? trim( $form_data[ $field_hidden_name ] ) : null;
+				$text = isset( $form_data[ $field_input_name ] ) ? trim( $form_data[ $field_input_name ] ) : null;
 
 				$custom_fields_data[] = array(
-					'customField'           => $custom_text,
+					'customField'           => $custom_text_id,
 					'customFieldOptionText' => $text,
 				);
 			}
