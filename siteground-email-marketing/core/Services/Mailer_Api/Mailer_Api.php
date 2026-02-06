@@ -25,7 +25,7 @@ class Mailer_Api {
 	}
 
 	/**
-	 * Call the mailer api.
+	 * Call the mailer API.
 	 *
 	 * @since  1.0.0
 	 *
@@ -35,16 +35,16 @@ class Mailer_Api {
 	 *
 	 * @throws \Exception An exception if something went wrong.
 	 *
-	 * @return array         The response from the mailer api.
+	 * @return array         The response from the mailer API.
 	 */
 	private function call( $route, $data = array(), $method = 'GET' ) {
 		if ( empty( $this->token ) ) {
-			throw new \Exception( __( 'Missing api token.', 'siteground-email-marketing' ), 400 );
+			throw new \Exception( esc_html__( 'Missing api token.', 'siteground-email-marketing' ), 400 );
 		}
 
 		// Load .env and retrieve constants.
-		$api_url  = ! isset( $_ENV['SG_EM_API_URL'] ) ? self::API_URL : $_ENV['SG_EM_API_URL'];
-		$api_host = ! isset( $_ENV['SG_EM_API_HOST'] ) ? '' : $_ENV['SG_EM_API_HOST'];
+		$api_url  = ! isset( $_ENV['SG_EM_API_URL'] ) ? self::API_URL : esc_url_raw( $_ENV['SG_EM_API_URL'] );
+		$api_host = ! isset( $_ENV['SG_EM_API_HOST'] ) ? '' : sanitize_text_field( $_ENV['SG_EM_API_HOST'] );
 
 		$headers = array(
 			'Authorization' => 'Bearer: ' . $this->token,
@@ -212,7 +212,7 @@ class Mailer_Api {
 			$data['message']     = $this->get_connect_messages( $status_code );
 
 			if ( 401 === $status_code ) {
-				throw new \Exception( __( 'Please provide a valid token', 'siteground-email-marketing' ), 403 );
+				throw new \Exception( esc_html__( 'Please provide a valid token', 'siteground-email-marketing' ), 403 );
 			}
 		}
 
@@ -238,7 +238,7 @@ class Mailer_Api {
 		}
 
 		if ( is_wp_error( $response ) ) {
-			throw new \Exception( __( 'WordPress cannot process the request.', 'siteground-email-marketing' ), 400 );
+			throw new \Exception( esc_html__( 'WordPress cannot process the request.', 'siteground-email-marketing' ), 400 );
 		}
 
 		return $data;

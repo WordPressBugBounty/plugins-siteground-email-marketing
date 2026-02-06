@@ -22,6 +22,11 @@ class Forms extends WP_REST_Posts_Controller {
 	protected $post_type = 'sg_form';
 
 	/**
+	 * The Database placeholder.
+	 */
+	public $wpdb;
+
+	/**
 	 * The Constructor.
 	 *
 	 * @since 1.0.0
@@ -30,6 +35,9 @@ class Forms extends WP_REST_Posts_Controller {
 		parent::__construct( $this->post_type );
 		$this->namespace = $this->rest_namespace;
 		$this->rest_base = 'forms';
+
+		global $wpdb;
+		$this->wpdb = $wpdb;
 	}
 
 	/**
@@ -84,13 +92,12 @@ class Forms extends WP_REST_Posts_Controller {
 	 * @return boolean true/false Whether the title exists.
 	 */
 	public function form_title_exists( $title, $id ) {
-		global $wpdb;
 
-		$posts = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type = 'sg_form' AND post_status = 'publish' LIMIT 1",
-				$title,
-			),
+		$posts = $this->wpdb->get_results(
+					$this->wpdb->prepare( // phpcs:ignore
+						'SELECT ID FROM ' . esc_sql( $this->wpdb->posts ) . " WHERE post_title = %s AND post_type = 'sg_form' AND post_status = 'publish' LIMIT 1",
+						esc_sql( $title ),
+					),
 			ARRAY_A
 		);
 

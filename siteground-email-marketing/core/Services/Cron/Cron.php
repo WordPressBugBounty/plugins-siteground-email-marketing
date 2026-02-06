@@ -33,6 +33,11 @@ class Cron {
 	const BATCH_SIZE = 50;
 
 	/**
+	 * The Database placeholder.
+	 */
+	public $wpdb;
+
+	/**
 	 * The constructor.
 	 *
 	 * @since 1.0.0
@@ -41,6 +46,9 @@ class Cron {
 	 */
 	public function __construct( $background_process ) {
 		$this->background_process = $background_process;
+
+		global $wpdb;
+		$this->wpdb = $wpdb;
 	}
 
 	/**
@@ -84,23 +92,28 @@ class Cron {
 	 * @return array The data to be send.
 	 */
 	private function get_data() {
-		global $wpdb;
 
-		$results = $wpdb->get_results(
-			"
-			SELECT `meta_value`
-				FROM $wpdb->postmeta 
-			WHERE `meta_key` = 'sg_email_marketing_user_data'
-			UNION ALL
-			SELECT `meta_value`
-				FROM $wpdb->usermeta 
-			WHERE `meta_key` = 'sg_email_marketing_user_data'
-			UNION ALL
-			SELECT `meta_value`
-				FROM $wpdb->commentmeta 
-			WHERE `meta_key` = 'sg_email_marketing_user_data'
-			"
+		$results = $this->wpdb->get_results(
+						$this->wpdb->prepare( //phpcs:ignore
+							'
+							SELECT `meta_value`
+								FROM ' . esc_sql( $this->wpdb->postmeta ) . '
+							WHERE `meta_key` = %s
+							UNION ALL
+							SELECT `meta_value`
+								FROM ' . esc_sql( $this->wpdb->usermeta ) . ' 
+							WHERE `meta_key` = %s
+							UNION ALL
+							SELECT `meta_value`
+								FROM ' . esc_sql( $this->wpdb->commentmeta ) . ' 
+							WHERE `meta_key` = %s
+							',
+							'sg_email_marketing_user_data',
+							'sg_email_marketing_user_data',
+							'sg_email_marketing_user_data'
+						)
 		);
+
 		foreach( $results as $index => $result ) {
 			if ( is_array( $result->meta_value ) ) {
 				continue;
@@ -127,8 +140,25 @@ class Cron {
 	public static function delete_meta_data() {
 		global $wpdb;
 
-		$results = $wpdb->get_results( "DELETE FROM $wpdb->postmeta WHERE `meta_key` = 'sg_email_marketing_user_data';" );
-		$results = $wpdb->get_results( "DELETE FROM $wpdb->usermeta WHERE `meta_key` = 'sg_email_marketing_user_data';" );
-		$results = $wpdb->get_results( "DELETE FROM $wpdb->commentmeta WHERE `meta_key` = 'sg_email_marketing_user_data';" );
+		$results = $wpdb->get_results(
+					$wpdb->prepare(  //phpcs:ignore
+						'DELETE FROM ' . esc_sql( $wpdb->postmeta ) . ' WHERE `meta_key` = %s;',
+						'sg_email_marketing_user_data'
+					)
+		);
+
+		$results = $wpdb->get_results(
+					$wpdb->prepare(  //phpcs:ignore
+						'DELETE FROM ' . esc_sql( $wpdb->usermeta ) . ' WHERE `meta_key` = %s;',
+						'sg_email_marketing_user_data'
+					)
+		);
+
+		$results = $wpdb->get_results(
+					$wpdb->prepare(  //phpcs:ignore
+						'DELETE FROM ' . esc_sql( $wpdb->commentmeta ) . ' WHERE `meta_key` = %s;',
+						'sg_email_marketing_user_data'
+					)
+		);
 	}
 }

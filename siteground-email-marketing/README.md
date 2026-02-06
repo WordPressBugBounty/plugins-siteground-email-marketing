@@ -1,9 +1,9 @@
-Contributors: Hristo-Sg, siteground, sstoqnov, stoyangeorgiev, elenachavdarova, ignatggeorgiev
+Contributors: Hristo-Sg, siteground, sstoqnov, stoyangeorgiev, elenachavdarova, ignatggeorgiev, asparuhtenev
 Tags: leads, lead generation, growth, subscription
 Requires at least: 4.7
 Requires PHP: 7.0
-Tested up to: 6.8
-Stable tag: 1.7.1
+Tested up to: 6.9
+Stable tag: 1.7.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -45,6 +45,18 @@ Our plugin uses a cookie in order to function properly. It does not store person
 1. Start Collecting Leads: Once your integrations and forms are set up, you can start collecting leads and growing your email list.
 
 == Changelog ==
+= Version 1.7.3 =
+Release Date: Jan 13th, 2026
+
+* Third Party assets handling improvements
+* Required fields improvements
+* Registration, Comment forms improvements
+
+= Version 1.7.2 =
+Release Date: Nov 3rd, 2025
+
+* Security Improvements
+
 = Version 1.7.1 =
 Release Date: Jul 30th, 2025
 

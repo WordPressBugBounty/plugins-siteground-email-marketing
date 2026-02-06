@@ -146,18 +146,18 @@ class CF7 extends \SG_Email_Marketing\Integrations\Integrations {
 			return;
 		}
 
-		$post_id = esc_attr( $_POST['post_ID'] );
-		update_post_meta( $post_id, self::CF7_TOGGLE_META, isset( $_POST['sgwpmail-cf7-enable'] ) );
-		update_post_meta( $post_id, self::CF7_CHECKBOX_META, isset( $_POST['sgwpmail-cf7-checkbox-toggle'] ) );
+		$post_id = esc_attr( sanitize_text_field( wp_unslash( $_POST['post_ID'] ) ) ); // phpcs:ignore
+		update_post_meta( $post_id, self::CF7_TOGGLE_META, isset( $_POST['sgwpmail-cf7-enable'] ) ); // phpcs:ignore
+		update_post_meta( $post_id, self::CF7_CHECKBOX_META, isset( $_POST['sgwpmail-cf7-checkbox-toggle'] ) ); // phpcs:ignore
 
-		if ( isset ( $_POST['sgwpmail-cf7-labels'] ) ) {
-			update_post_meta( $post_id, self::CF7_SELECTED_LABELS_META, $_POST['sgwpmail-cf7-labels'] );
+		if ( isset( $_POST['sgwpmail-cf7-labels'] ) ) {  // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			update_post_meta( $post_id, self::CF7_SELECTED_LABELS_META, $_POST['sgwpmail-cf7-labels'] ); // phpcs:ignore
 		} else {
 			delete_post_meta( $post_id, self::CF7_SELECTED_LABELS_META );
 		}
 
-		if ( isset( $_POST['sgwpmail-cf7-checkbox-label'] ) ) {
-			update_post_meta( $post_id, self::CF7_CHECKBOX_LABEL_META, esc_attr( $_POST['sgwpmail-cf7-checkbox-label'] ) );
+		if ( isset( $_POST['sgwpmail-cf7-checkbox-label'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			update_post_meta( $post_id, self::CF7_CHECKBOX_LABEL_META, esc_attr( $_POST['sgwpmail-cf7-checkbox-label'] ) ); // phpcs:ignore
 		} else {
 			delete_post_meta( $post_id, self::CF7_CHECKBOX_LABEL_META );
 		}
@@ -169,7 +169,7 @@ class CF7 extends \SG_Email_Marketing\Integrations\Integrations {
 	 * @since 1.1.0
 	 */
 	public function get_data() {
-		return array_merge( (array) $_GET, (array) $_POST );
+		return array_merge( (array) $_GET, (array) $_POST ); // phpcs:ignore
 	}
 
 	/**
@@ -316,9 +316,9 @@ class CF7 extends \SG_Email_Marketing\Integrations\Integrations {
 	 * @since 1.1.0
 	 */
 	public function enqueue_styles_scripts() {
-		wp_enqueue_script( 'selectize.js', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js', array( 'jquery' ) );
-		wp_enqueue_style( 'selectize.js', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css' );
-		wp_enqueue_style( 'googleFonts', '//fonts.googleapis.com/css2?family=Roboto&display=swap', array(), null );
+		wp_enqueue_script( 'selectize.js', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js', array( 'jquery' ), '0.15.2', true );
+		wp_enqueue_style( 'selectize.js', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css', array(), '0.15.2', 'all' );
+		wp_enqueue_style( 'googleFonts', '//fonts.googleapis.com/css2?family=Roboto&display=swap', array(), '1.0.0', 'all' );
 
 		wp_enqueue_script(
 			'sg-email-marketing-cf7-integration',
@@ -346,6 +346,7 @@ class CF7 extends \SG_Email_Marketing\Integrations\Integrations {
 	 * @return array              A list with label ids.
 	 */
 	public function get_label_ids( $label_names ) {
+
 		$labels_list = Loader::get_instance()->mailer_api->get_labels();
 
 		$label_ids = array();

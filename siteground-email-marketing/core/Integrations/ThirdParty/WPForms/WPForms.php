@@ -77,9 +77,9 @@ class WPForms extends \SG_Email_Marketing\Integrations\Integrations {
 	 * @since 1.1.0
 	 */
 	public function enqueue_styles_scripts() {
-		wp_enqueue_script( 'selectize.js', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js', array( 'jquery' ) );
-		wp_enqueue_style( 'selectize.js', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css' );
-		wp_enqueue_style( 'googleFonts', '//fonts.googleapis.com/css2?family=Roboto&display=swap', array(), null );
+		wp_enqueue_script( 'selectize.js', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js', array( 'jquery' ), '0.15.2', true );
+		wp_enqueue_style( 'selectize.js', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css', array(), '0.15.2', 'all' );
+		wp_enqueue_style( 'googleFonts', '//fonts.googleapis.com/css2?family=Roboto&display=swap', array(), '1.0.0', 'all' );
 
 		wp_enqueue_script(
 			'sg-email-marketing-wp-forms-integration',
@@ -104,8 +104,8 @@ class WPForms extends \SG_Email_Marketing\Integrations\Integrations {
 	 * @return void
 	 */
 	public function save_form() {
-		if ( isset( $_POST['form_id'] ) && isset( $_POST['sg_email_marketing_groups'] ) ) {
-			update_post_meta( esc_attr( $_POST['form_id'] ), 'sg_email_marketing_groups', json_decode( stripslashes( $_POST['sg_email_marketing_groups'] ) ) );
+		if ( isset( $_POST['form_id'] ) && isset( $_POST['sg_email_marketing_groups'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			update_post_meta( esc_attr( $_POST['form_id'] ), 'sg_email_marketing_groups', json_decode( stripslashes( $_POST['sg_email_marketing_groups'] ) ) ); // phpcs:ignore
 		}
 	}
 

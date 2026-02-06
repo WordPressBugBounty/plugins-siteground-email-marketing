@@ -10,7 +10,7 @@
  * Plugin Name:       SiteGround Email Marketing
  * Plugin URI:        https://siteground.com
  * Description:       Use this plugin to link your WordPress site with the SiteGround Email Marketing service and seamlessly grow your mailing list!
- * Version:           1.7.1
+ * Version:           1.7.3
  * Author:            SiteGround
  * Author URI:        https://www.siteground.com
  * Text Domain:       siteground-email-marketing
@@ -32,7 +32,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 // Define version constant.
 if ( ! defined( __NAMESPACE__ . '\VERSION' ) ) {
-	define( __NAMESPACE__ . '\VERSION', '1.7.1' );
+	define( __NAMESPACE__ . '\VERSION', '1.7.3' );
 }
 
 // Define slug constant.

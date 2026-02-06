@@ -104,7 +104,7 @@ class Woo_Form extends Integrations {
 		);
 
 		if ( $this->helper->is_cron_disabled() ) {
-			$this->mailer_api->send_data( $data );
+			$this->mailer_api->send_data( array( $data ) );
 			return;
 		}
 
@@ -216,7 +216,7 @@ class Woo_Form extends Integrations {
 		);
 
 		if ( $this->helper->is_cron_disabled() ) {
-			$this->mailer_api->send_data( $data );
+			$this->mailer_api->send_data( array( $data ) );
 			return;
 		}
 

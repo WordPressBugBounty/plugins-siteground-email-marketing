@@ -61,14 +61,16 @@ class Forms {
 	 * @since 1.5.3
 	 */
 	public function handle_form_submission() {
-		if ( ! wp_verify_nonce( sanitize_key( $_POST['wpnonce'] ), 'sg-email-marketing-form' ) ) {
+		if ( ! isset( $_POST['wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['wpnonce'] ), 'sg-email-marketing-form' ) ) {
 			wp_send_json_error();
 		}
 
-		// Parse the URL-encoded string into an associative array
-		parse_str( html_entity_decode( $_POST['form_data'] ), $data );
+		if ( isset( $_POST['form_data'] ) ) {
+			// Parse the URL-encoded string into an associative array
+			parse_str( html_entity_decode( wp_unslash( $_POST['form_data'] ) ), $data );
+		}
 
-		if ( empty( $data['form-id'] ) || ! empty( $data['spam-protection'] )  ) {
+		if ( empty( $data['form-id'] ) || ! empty( $data['spam-protection'] ) ) {
 			wp_send_json_error();
 		}
 
@@ -104,6 +106,7 @@ class Forms {
 			}
 
 			if ( intval( $field['required'] ) === 1 && empty( $field_value ) ) {
+				// translators: the label for the required form field.
 				$errors[ $field['sg-form-type'] ] = printf( esc_attr__( 'The field "%s" is required!', 'siteground-email-marketing' ), esc_attr( $field['label'] ) );
 				continue;
 			}

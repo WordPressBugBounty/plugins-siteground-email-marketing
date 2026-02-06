@@ -101,7 +101,7 @@ final class SGWPMAIL_Action extends \NF_Abstracts_ActionNewsletter {
 	 * @return string HTML of the groups field.
 	 */
 	public function get_groups_html( $action ) {
-		$form_id = isset( $_GET['form_id'] ) ? wp_unslash( $_GET['form_id'] ) : 0;
+		$form_id = isset( $_GET['form_id'] ) ? sanitize_text_field( wp_unslash( $_GET['form_id'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		$form = \Ninja_Forms()->form( $form_id )->get();
 

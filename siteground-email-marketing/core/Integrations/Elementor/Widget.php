@@ -223,7 +223,7 @@ class Widget extends Widget_Base {
 			'field_colors_title',
 			[
 				'type'            => Controls_Manager::RAW_HTML,
-				'raw'             => __( '<strong>Colors</strong>', 'siteground-email-marketing' ),
+				'raw'             => '<strong>' . esc_html__( 'Colors', 'siteground-email-marketing' ) . '</strong>',
 				'separator'       => 'after',
 			]
 		);
@@ -333,7 +333,7 @@ class Widget extends Widget_Base {
 			'button_colors_title',
 			[
 				'type'            => Controls_Manager::RAW_HTML,
-				'raw'             => __( '<strong>Colors</strong>', 'siteground-email-marketing' ),
+				'raw'             => '<strong>' . __( 'Colors', 'siteground-email-marketing' ) . '</strong>',
 				'separator'       => 'after',
 			]
 		);
@@ -382,7 +382,7 @@ class Widget extends Widget_Base {
 		);
 
 		if ( $settings['formId'] ) {
-			echo Renderer::get_instance()->render( esc_attr( $settings['formId'] ), $settings );
+			echo Renderer::get_instance()->render( esc_attr( $settings['formId'] ), $settings ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, found 'Renderer'.
 		}
 	}
 

@@ -188,7 +188,7 @@ class Loader {
 		// Add the Forms menu item.
 		add_action( 'admin_menu', array( $this->forms_page, 'add_submenu_item' ) );
 		// Register the styles for the Dashboard area.
-		add_action( 'admin_enqueue_scripts', array( $this->forms_page, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this->forms_page, 'enqueue_styles' ), 111 );
 		// Register the JavaScript for the Dashboard area.
 		add_action( 'admin_enqueue_scripts', array( $this->forms_page, 'enqueue_scripts' ) );
 		// Add the React config.
@@ -201,7 +201,7 @@ class Loader {
 		// Remove error and notices on our pages.
 		add_action( 'admin_init', array( $this->settings_page, 'hide_errors_and_notices' ), PHP_INT_MAX );
 		// Register the styles for the Dashboard area.
-		add_action( 'admin_enqueue_scripts', array( $this->settings_page, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this->settings_page, 'enqueue_styles' ), 111 );
 		// Register the JavaScript for the Dashboard area.
 		add_action( 'admin_enqueue_scripts', array( $this->settings_page, 'enqueue_scripts' ) );
 		// Add the React config.

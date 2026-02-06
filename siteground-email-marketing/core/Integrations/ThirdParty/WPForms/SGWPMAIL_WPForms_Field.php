@@ -203,13 +203,12 @@ class SGWPMAIL_WPForms_Field extends \WPForms_Field {
 	 */
 	public function field_preview( $field ) {
 		echo '<h4 class="sg-email-marketing-checkbox-disabled"><i class="fa fa-eye-slash"></i> ' .
-			__( 'Consent checkbox is NOT ADDED. We recommend adding a consent checkbox if the main purpose of the form is not subscription. To include a consent checkbox, simply click on this alert and activate the Consent Checkbox option from the settings menu.<br>Note: This message is for administrative purposes and will not be visible to users.', 'siteground-email-marketing' ) .
+			esc_html__( 'Consent checkbox is NOT ADDED. We recommend adding a consent checkbox if the main purpose of the form is not subscription. To include a consent checkbox, simply click on this alert and activate the Consent Checkbox option from the settings menu.<br>Note: This message is for administrative purposes and will not be visible to users.', 'siteground-email-marketing' ) .
 			'</h4>';
 
 		$checkbox_text = isset( $field['sg_email_marketing_checkbox_text'] ) ? $field['sg_email_marketing_checkbox_text'] : '';
 
-		printf( '<div class="sg-email-marketing-checkbox-enabled"><input type="checkbox" disabled><span class="sg_email_marketing_field_preview_label">%s</span></div>', $checkbox_text );
-
+		printf( '<div class="sg-email-marketing-checkbox-enabled"><input type="checkbox" disabled><span class="sg_email_marketing_field_preview_label">%s</span></div>', esc_html( $checkbox_text ) );
 	}
 
 	/**
@@ -228,8 +227,7 @@ class SGWPMAIL_WPForms_Field extends \WPForms_Field {
 		// Setup and sanitize the necessary data.
 		$field_id   = $field['properties']['inputs']['primary']['id'];
 		$field_name = $field['properties']['inputs']['primary']['attr']['name'];
-		printf( '<input id="%s" value="1" name="%s" type="checkbox"><label for="%s" class="sg_email_marketing_field_preview_label">%s</span>', $field_id, $field_name, $field_id, $field['sg_email_marketing_checkbox_text'] );
-
+		printf( '<input id="%s" value="1" name="%s" type="checkbox"><label for="%s" class="sg_email_marketing_field_preview_label">%s</span>', esc_attr( $field_id ), esc_attr( $field_name ), esc_attr( $field_id ), esc_html( $field['sg_email_marketing_checkbox_text'] ) );
 	}
 
 	/**

@@ -17,6 +17,15 @@ abstract class Page {
 	public $plugin_slug = 'sg-email-marketing';
 
 	/**
+	 * List of conflicting admin styles, to be dequeued.
+	 *
+	 * @var array
+	 */
+	public $dequeued_styles = array(
+		'elegant', // Elegant Icons-set
+	);
+
+	/**
 	 * Display the admin page.
 	 *
 	 * @since  1.0.0
@@ -51,7 +60,7 @@ abstract class Page {
 
 		// Hide all error in our page.
 		if (
-			isset( $_GET['page'] ) &&
+			isset( $_GET['page'] ) && // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			( $this->page_id === $_GET['page'] ) // phpcs:ignore
 		) {
 			remove_all_actions( 'network_admin_notices' );
@@ -100,6 +109,11 @@ abstract class Page {
 		// Bail if we are on different page.
 		if ( false === $this->is_plugin_page() ) {
 			return;
+		}
+
+		// Dequeue conflicting styles.
+		foreach ( $this->dequeued_styles as $style ) {
+			wp_dequeue_style( $style );
 		}
 
 		wp_enqueue_style(

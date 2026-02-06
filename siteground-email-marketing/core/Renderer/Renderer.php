@@ -152,17 +152,23 @@ class Renderer {
 	 * @return string         Markup, used for the form.
 	 */
 	public function render( $form_id, $attr ) {
-		$form         = get_post( $form_id );
+		$form_id = (int) $form_id;
+		$form = get_post( $form_id );
+		// Check if the form id belongs to the 'sg_form' post type.
+		if ( 'sg_form' !== $form->post_type ) {
+			return;
+		}
+
 		$fields       = json_decode( $form->post_content );
 		$attr['hash'] = bin2hex( random_bytes( 18 ) );
 		$html         = self::render_css( $attr );
 		$orientation  = isset( $attr['formOrientation'] ) ? 'sg-marketing-form-container-' . $attr['formOrientation'] : 'sg-marketing-form-container-column';
 
-		$html .= '<form class="sg-marketing-form sg-email-marketing-form-' . $form_id . '-' . $attr['hash'] . '">';
+		$html .= '<form class="sg-marketing-form sg-email-marketing-form-' . esc_attr( $form_id ) . '-' . $attr['hash'] . '">';
 		$html .= \wp_nonce_field( 'sg-email-marketing-form', '_wpnonce', true, false );
-		$html .= '<div class="sg-email-marketing-form-' . $form_id . '-' . $attr['hash'] . ' sg-marketing-form-submit_message sg-marketing-form-submit_message--hidden sg-marketing-form-submit_message--success">' . $fields->settings->success_message . '</div>';
-		$html .= '<div class="sg-email-marketing-form-' . $form_id . '-' . $attr['hash'] . ' sg-marketing-form-submit_message sg-marketing-form-submit_message--hidden sg-marketing-form-submit_message--error">' . __( 'There was an issue submitting the form!', 'siteground-email-marketing' ) . '</div>';
-		$html .= '<fieldset id="sg-email-marketing-' . esc_attr( $form_id ) . '" class="sg-marketing-form-container sg-email-marketing-form-' . $form_id . '-' . $attr['hash'] . ' ' . esc_attr( $orientation ) . '">';
+		$html .= '<div class="sg-email-marketing-form-' . esc_attr( $form_id ) . '-' . $attr['hash'] . ' sg-marketing-form-submit_message sg-marketing-form-submit_message--hidden sg-marketing-form-submit_message--success">' . esc_html( $fields->settings->success_message ) . '</div>';
+		$html .= '<div class="sg-email-marketing-form-' . esc_attr( $form_id ) . '-' . $attr['hash'] . ' sg-marketing-form-submit_message sg-marketing-form-submit_message--hidden sg-marketing-form-submit_message--error">' . __( 'There was an issue submitting the form!', 'siteground-email-marketing' ) . '</div>';
+		$html .= '<fieldset id="sg-email-marketing-' . esc_attr( $form_id ) . '" class="sg-marketing-form-container sg-email-marketing-form-' . esc_attr( $form_id ) . '-' . $attr['hash'] . ' ' . esc_attr( $orientation ) . '">';
 
 		// Check if $fields->title is set and is an array.
 		if ( isset( $fields->title ) && is_array( $fields->title ) ) {
@@ -204,7 +210,7 @@ class Renderer {
 					// The HTML for name, last name, email fields.
 					$html .= '<div class="sg-input-container">';
 					if ( ! empty( $field->label ) ) {
-						$html .= '<label for="input-' . esc_attr( $field->id ) . $attr['hash'] . '"> ' . $field->label;
+						$html .= '<label for="input-' . esc_attr( $field->id ) . $attr['hash'] . '"> ' . esc_html( $field->label );
 							$html .= ( $required ? ' <span class="sg-marketing-form-required-label" aria-hidden="true">*</span>' : '' );
 						$html .= '</label>';
 					}
@@ -228,11 +234,11 @@ class Renderer {
 			$new_tab = ! empty( $fields->consent->new_tab ) ? 'target="_blank"' : '';
 
 			$link = ! empty( $fields->consent->consent_link ) ?
-				'<a ' . $new_tab . ' href="' . $fields->consent->consent_link . '">' . $fields->consent->consent_text . '</a>' :
-				$fields->consent->consent_text;
+				'<a ' . $new_tab . ' href="' . esc_url( $fields->consent->consent_link ) . '">' . esc_html( $fields->consent->consent_text ) . '</a>' :
+				esc_html( $fields->consent->consent_text );
 
 			if ( ! empty( $fields->consent->consent_checkbox ) ) {
-				$html .= '<input 
+				$html .= '<input  required
 				id="sg-marketing-form-checkbox" 
 				name="sg-marketing-form-checkbox" 
 				type="checkbox"/>

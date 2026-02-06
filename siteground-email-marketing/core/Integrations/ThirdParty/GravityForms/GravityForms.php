@@ -258,11 +258,11 @@ class GravityForms extends Integrations {
 		case 'sgwpmail':
 			field.inputs = null;
 			if (!field.label)
-				field.label = <?php echo json_encode( esc_html__( 'Newsletter subscription', 'siteground-email-marketing' ) ); ?>;
+				field.label = <?php echo wp_json_encode( esc_html__( 'Newsletter subscription', 'siteground-email-marketing' ) ); ?>;
 			if( !field.sgwpmailConsentToggle)
 				field.sgwpmailConsentToggle = true;
 			if( !field.sgwpmailConsentText)
-				field.sgwpmailConsentText = '<?php _e( 'Subscribe to our Newsletter', 'siteground-email-marketing' ); ?>';
+				field.sgwpmailConsentText = '<?php esc_html_e( 'Subscribe to our Newsletter', 'siteground-email-marketing' ); ?>';
 				jQuery( '.sg_email_marketing_field_preview_label').text(field.sgwpmailConsentText);
 			break;
 		<?php
