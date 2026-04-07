@@ -1,4 +1,17 @@
 <script type='text/javascript'>
+    jQuery(document).on('gform_load_form_settings', function(event, field, form) {
+        if ( typeof jQuery.fn.selectize !== 'function' ) {
+            var script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js';
+            document.head.appendChild(script);
+
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css';
+            document.head.appendChild(link);
+        }
+    });
+
     jQuery(document).on('gform_load_field_settings', function(event, field, form){
         jQuery( '#field_sgwpmail_consent_toggle' ).prop( 'checked', Boolean( rgar( field, 'sgwpmailConsentToggle' ) ) );
         jQuery( '#field_sgwpmail_consent_text').val(rgar( field, 'sgwpmailConsentText' ))

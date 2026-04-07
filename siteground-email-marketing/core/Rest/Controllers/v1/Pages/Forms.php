@@ -5,6 +5,7 @@ use WP_REST_Posts_Controller;
 use SG_Email_Marketing\Traits\Rest_Trait;
 use SG_Email_Marketing\Loader\Loader;
 use SG_Email_Marketing\Post_Types\Forms as Forms_Post_Type;
+use SiteGround_Helper\Helper_Service;
 
 /**
  * Class responsible for the Forms plugin page.
@@ -27,6 +28,11 @@ class Forms extends WP_REST_Posts_Controller {
 	public $wpdb;
 
 	/**
+	 * The WP Filesystem placeholder.
+	 */
+	public $wp_filesystem;
+
+	/**
 	 * The Constructor.
 	 *
 	 * @since 1.0.0
@@ -38,6 +44,7 @@ class Forms extends WP_REST_Posts_Controller {
 
 		global $wpdb;
 		$this->wpdb = $wpdb;
+		$this->wp_filesystem = Helper_Service::setup_wp_filesystem();
 	}
 
 	/**
@@ -123,6 +130,12 @@ class Forms extends WP_REST_Posts_Controller {
 	public function prepare_item_for_response( $item, $request ) {
 		$body = json_decode( $request->get_body(), true );
 
+		if ( empty( $item->post_content ) ) {
+			$item->post_content = $this->wp_filesystem->get_contents(
+				\SG_Email_Marketing\DIR . '/templates/default-form-content.json'
+			);
+		}
+
 		return array(
 			'ID'           => $item->ID,
 			'body'         => json_decode( $item->post_content ),
@@ -146,7 +159,18 @@ class Forms extends WP_REST_Posts_Controller {
 			$this->sync_custom_fields();
 		}
 
-		return parent::get_items( $request );
+		$response = parent::get_items( $request );
+
+		// Check if the form body is empty and rebuild it if necessary.
+		foreach ( $response->data as $index => $form_data ) {
+			if ( empty( $form_data['body'] ) ) {
+				$response->data[ $index ]['body'] = wp_json_file_decode(
+					\SG_Email_Marketing\DIR . '/templates/default-form-content.json'
+				);
+			}
+		}
+
+		return $response;
 	}
 
 	/**
