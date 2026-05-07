@@ -195,10 +195,21 @@ class Settings {
 		// Prepare the integrations.
 		$all_integrations = array();
 
+		// Get the current settings.
+		$api_labels = Loader::get_instance()->mailer_api->get_labels();
+
 		// Loop the integrations to prepare them for the SPA.
 		foreach ( $this->integrations as $id => $integration ) {
+
 			$all_integrations[ $id ] = $integration->fetch_settings();
 
+			// Sync and update the labels if needed.
+			$all_integrations[ $id ]['labels'] = $this->update_labels(
+				$integration,
+				$api_labels,
+				$all_integrations[ $id ]['labels'],
+				$all_integrations[ $id ]
+			);
 		}
 
 		return rest_ensure_response( $all_integrations );
@@ -233,5 +244,61 @@ class Settings {
 				'meta' => $body['meta'],
 			)
 		);
+	}
+
+	/**
+	 * Compares and updates the database stored labels.
+	 *
+	 * @param object $integration The integration we are working with.
+	 *
+	 * @param array $api_labels    The Email Service labels, which we get trough the mailer API..
+	 *
+	 * @param array $stored_labels The labels we have stored in the database.
+	 *
+	 * @param array $settings The integration's settings.
+	 *
+	 * @return array Array with the stored or updated labels.
+	 */
+	public function update_labels( $integration, $api_labels, $stored_labels, $settings ) {
+		// Bail if there are no saved laved yet.
+		if ( empty( $stored_labels ) ) {
+			return $stored_labels;
+		}
+
+		// Prepare assoc array with the id=>name.
+		$api_label_ids = array();
+		foreach ( $api_labels['data'] as $api_label ) {
+			$api_label_ids[ $api_label['id'] ] = $api_label['name'];
+		}
+
+		// Loop trough and sync the stored labels.
+		$updated_labels = array();
+		foreach ( $stored_labels as $stored_label ) {
+			// Get the ID of the stored label.
+			$id = $stored_label['id'];
+
+			// Check if there is an EM Service label with that id.
+			if ( isset( $api_label_ids[ $id ] ) ) {
+				// If the ID exists, then compare the name.
+				if ( $api_label_ids[ $id ] !== $stored_label['name'] ) {
+					// If the name has changed, update the stored name to the new one.
+					$stored_label['name'] = $api_label_ids[ $id ];
+				}
+				// Save the updated labels.
+				$updated_labels[] = $stored_label;
+			}
+		}
+
+		// If there are differences in the labels, update the settings.
+		if ( json_encode( $updated_labels ) !== json_encode( $stored_labels ) ) {
+			// Assign the updated labels to the settings.
+			$settings['labels'] = $updated_labels;
+			// Update the settings in the db.
+			$integration->update_settings( $settings );
+
+			return $updated_labels;
+		}
+
+		return $stored_labels;
 	}
 }

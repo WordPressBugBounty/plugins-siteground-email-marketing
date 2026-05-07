@@ -124,7 +124,7 @@ class Elementor_Forms_Integration extends \ElementorPro\Modules\Forms\Classes\In
 			return array();
 		}
 		foreach ( $labels_list['data'] as $label ) {
-			$labels[ $label['name'] ] = $label['name'];
+			$labels[ $label['id'] ] = $label['name'];
 		}
 
 		return $labels;
@@ -139,7 +139,6 @@ class Elementor_Forms_Integration extends \ElementorPro\Modules\Forms\Classes\In
 	 * @param \ElementorPro\Modules\Forms\Classes\Ajax_Handler $ajax_handler Ajax Handler object that is in use.
 	 */
 	public function run( $record, $ajax_handler ) {
-
 		$checkbox_field_id = false;
 		$fields            = $record->get( 'fields' );
 		$data              = $record->get( 'sent_data' );
@@ -155,7 +154,7 @@ class Elementor_Forms_Integration extends \ElementorPro\Modules\Forms\Classes\In
 		) {
 			$settings   = $record->get( 'form_settings' );
 			$field_map  = $settings['sgwpmail_fields_map'];
-			$label_ids  = $this->get_label_ids( $settings['sgwpmail_elementor_forms_labels_list'] );
+			$label_ids  = $settings['sgwpmail_elementor_forms_labels_list'];
 			$first_name = '';
 			$last_name  = '';
 			$first_name_localid  = '';
@@ -254,6 +253,7 @@ class Elementor_Forms_Integration extends \ElementorPro\Modules\Forms\Classes\In
 			),
 		);
 	}
+
 	/**
 	 * Get label ids from label names
 	 *

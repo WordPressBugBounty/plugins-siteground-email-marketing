@@ -117,17 +117,30 @@ final class SGWPMAIL_Action extends \NF_Abstracts_ActionNewsletter {
 		if ( ! empty( $selected ) ) {
 			$selected = json_decode( $selected );
 		}
+
 		$options       = '';
 		$labels        = $this->get_labels();
 		$selected_html = '';
+
 		foreach ( $labels as $key => $label ) {
 			if ( ! empty( $selected ) ) {
-				$selected_html = in_array( $label['value'], $selected, true ) ? 'selected' : '';
+				$selected_html = in_array( (string) $label['value'], $selected, true ) ? 'selected' : '';
 			}
 
 			$options .= '<option value="' . $label['value'] . '" ' . $selected_html . '>' . $label['label'] . '</option>';
 		}
-		return '<label for="sgwpmail_groups[]">' . __( 'Groups', 'siteground-email-marketing' ) . '</label><span class="sgwpmail-help">' . __( 'People subscribing through this form will be added to the selected groups', 'siteground-email-marketing' ) . '</span><select multiple name="sgwpmail_groups[]" id="sgwpmail_groups[]">' . $options . '</select>';
+
+		// Build the 'sgwpmail_groups' HTML string.
+		$sgwpmail_gropus_html = '<label for="sgwpmail_groups[]">' . __( 'Groups', 'siteground-email-marketing' ) . '</label><span class="sgwpmail-help">' . __( 'People subscribing through this form will be added to the selected groups', 'siteground-email-marketing' ) . '</span><select multiple name="sgwpmail_groups[]" id="sgwpmail_groups[]">' . $options . '</select>';
+
+		// Update the settings.
+		foreach ( $actions as $action ) {
+			if ( $action->get_setting( 'sgwpmail_groups' ) ) {
+				$action->update_setting( 'sgwpmail_groups', $sgwpmail_gropus_html );
+			}
+		}
+
+		return $sgwpmail_gropus_html;
 	}
 
 	/**
@@ -179,7 +192,7 @@ final class SGWPMAIL_Action extends \NF_Abstracts_ActionNewsletter {
 		}
 
 		$data = array(
-			'labels'    => $this->get_label_ids( json_decode( $action_settings['sgwpmail_groups_value'] ) ),
+			'labels'    => json_decode( $action_settings['sgwpmail_groups_value'] ),
 			'firstName' => $data['first_name'],
 			'lastName'  => $data['last_name'],
 			'email'     => $data['email'],
@@ -213,32 +226,11 @@ final class SGWPMAIL_Action extends \NF_Abstracts_ActionNewsletter {
 
 		foreach ( $labels_list['data'] as $label ) {
 			$labels[] = array(
-				'value' => $label['name'],
+				'value' => $label['id'],
 				'label' => $label['name'],
 			);
 		}
 
 		return $labels;
-
-	}
-	/**
-	 * Get label ids from label names
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param  array $label_names A list with the label names.
-	 *
-	 * @return array              A list with label ids.
-	 */
-	public function get_label_ids( $label_names ) {
-		$labels_list = Loader::get_instance()->mailer_api->get_labels();
-
-		$label_ids = array();
-		foreach ( $labels_list['data'] as $label ) {
-			if ( in_array( $label['name'], $label_names, true ) ) {
-				$label_ids[] = $label['id'];
-			}
-		}
-		return $label_ids;
 	}
 }

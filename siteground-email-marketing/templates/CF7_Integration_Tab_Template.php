@@ -26,13 +26,13 @@
 		</label>
 		<select multiple id="sgwpmail-cf7-labels" name="sgwpmail-cf7-labels[]">
 			<?php
-				foreach ( $labels_list['data'] as $label ) {
-					if ( 'array' === gettype( $saved_labels ) && \in_array( $label['name'], $saved_labels ) ) {
-						echo '<option selected value="' . esc_attr( $label['name'] ) . '">' . esc_html( $label['name'] ) . '</option>';
-						continue;
-					}
-					echo '<option value="' . esc_attr( $label['name'] ) . '">' . esc_html( $label['name'] ) . '</option>';
+			foreach ( $labels_list['data'] as $label ) {
+				if ( 'array' === gettype( $saved_labels ) && \in_array( $label['id'], $saved_labels ) ) {
+					echo '<option selected value="' . esc_attr( $label['id'] ) . '">' . esc_html( $label['name'] ) . '</option>';
+					continue;
 				}
+				echo '<option value="' . esc_attr( $label['id'] ) . '">' . esc_html( $label['name'] ) . '</option>';
+			}
 			?>
 		</select>
 		<span class="sgwpmail-description">

@@ -123,6 +123,7 @@ class WPForms extends \SG_Email_Marketing\Integrations\Integrations {
 		foreach ( $data['fields'] as $key => $field ) {
 			if ( 'sg_email_marketing' === $field['type'] ) {
 				$data['fields'][ $key ]['sg_email_marketing_groups'] = get_post_meta( $form_id, 'sg_email_marketing_groups', true );
+
 				$form_id = wpforms()->get( 'form' )->update( $form_id, $data, array( 'context' => 'save_form' ) );
 				return;
 			}
@@ -174,7 +175,7 @@ class WPForms extends \SG_Email_Marketing\Integrations\Integrations {
 				}
 
 				$data = array(
-					'labels'    => $this->get_label_ids( $form_data['fields'][ $field_id ]['sg_email_marketing_groups'] ),
+					'labels'    => $form_data['fields'][ $field_id ]['sg_email_marketing_groups'],
 					'firstName' => $data['first_name'],
 					'lastName'  => $data['last_name'],
 					'email'     => $data['email'],
@@ -185,25 +186,5 @@ class WPForms extends \SG_Email_Marketing\Integrations\Integrations {
 				$this->mailer_api->send_data( array( $data ) );
 			}
 		}
-	}
-	/**
-	 * Get label ids from label names
-	 *
-	 * @since 1.1.4
-	 *
-	 * @param  array $label_names A list with the label names.
-	 *
-	 * @return array              A list with label ids.
-	 */
-	public function get_label_ids( $label_names ) {
-		$labels_list = Loader::get_instance()->mailer_api->get_labels();
-
-		$label_ids = array();
-		foreach ( $labels_list['data'] as $label ) {
-			if ( in_array( $label['name'], $label_names, true ) ) {
-				$label_ids[] = $label['id'];
-			}
-		}
-		return $label_ids;
 	}
 }

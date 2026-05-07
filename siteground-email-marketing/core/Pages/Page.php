@@ -23,6 +23,7 @@ abstract class Page {
 	 */
 	public $dequeued_styles = array(
 		'elegant', // Elegant Icons-set
+		'admin-icons-font', // Yoga-fit Тheme
 	);
 
 	/**

@@ -10,6 +10,7 @@ if ( 0 === $position ) {
 	}
 
 	$saved_labels = ! empty( $field_values['sgwpmailGroups'] ) ? $field_values['sgwpmailGroups'] : array();
+
 	?>
 	<li class="sgwpmail_groups field_setting">
 		<span class=sgwpmail-groups-dropdown>
@@ -19,12 +20,12 @@ if ( 0 === $position ) {
 			</label>
 			<select multiple id="sgwpmail-gf-groups" name="sgwpmail-gf-groups[]" onchange="sgwpmail_change_labels(this);">
 				<?php
-				foreach ( $labels_list as $label ) {
-					if ( 'array' === gettype( $saved_labels ) && \in_array( $label, $saved_labels ) ) {
-						echo '<option selected value="' . esc_attr( $label ) . '">' . esc_html( $label ) . '</option>';
+				foreach ( $labels_list as $label_id => $label_name ) {
+					if ( 'array' === gettype( $saved_labels ) && \in_array( $label_id, $saved_labels, true ) ) {
+						echo '<option selected value="' . esc_attr( $label_id ) . '">' . esc_html( $label_name ) . '</option>';
 						continue;
 					}
-					echo '<option value="' . esc_attr( $label ) . '">' . esc_html( $label ) . '</option>';
+					echo '<option value="' . esc_attr( $label_id ) . '">' . esc_html( $label_name ) . '</option>';
 				}
 				?>
 			</select>

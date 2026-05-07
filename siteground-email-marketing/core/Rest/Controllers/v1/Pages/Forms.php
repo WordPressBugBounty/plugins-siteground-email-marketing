@@ -144,7 +144,6 @@ class Forms extends WP_REST_Posts_Controller {
 		);
 	}
 
-
 	/**
 	 * Sync the labels and the custom fields before getting the forms data.
 	 *
@@ -156,6 +155,7 @@ class Forms extends WP_REST_Posts_Controller {
 
 		// Sync only if we are connected.
 		if ( isset( $status['status'] ) && 'connected' === $status['status'] ) {
+			$this->sync_labels();
 			$this->sync_custom_fields();
 		}
 
@@ -195,9 +195,9 @@ class Forms extends WP_REST_Posts_Controller {
 				continue;
 			}
 
-			$stored_fields     = $body['custom-fields'];
-			$original_fields   = $stored_fields;
-			$updated_fields    = array();
+			$stored_fields   = $body['custom-fields'];
+			$original_fields = $stored_fields;
+			$updated_fields  = array();
 
 			foreach ( $stored_fields as $stored_field ) {
 				$id = $stored_field['cf-id'];
@@ -206,7 +206,7 @@ class Forms extends WP_REST_Posts_Controller {
 					continue;
 				}
 
-				// Get the custom field data, received from the ME Service.
+				// Get the custom field data, received from the EM Service.
 				$api_field = $api_field_map[ $id ];
 
 				// Check and update the name of the custom field in case it has changed.
@@ -230,7 +230,6 @@ class Forms extends WP_REST_Posts_Controller {
 								// If the name has changed, update the stored name to the new one.
 								$stored_option['name'] = $api_options[ $stored_option['id'] ];
 							}
-
 							$updated_options[] = $stored_option;
 						}
 					}
@@ -243,7 +242,6 @@ class Forms extends WP_REST_Posts_Controller {
 
 			// Check if update is needed.
 			if ( json_encode( $original_fields ) !== json_encode( $updated_fields ) ) {
-
 				$body['custom-fields'] = $updated_fields;
 
 				wp_update_post(
@@ -255,4 +253,67 @@ class Forms extends WP_REST_Posts_Controller {
 			}
 		}
 	}
+
+	/**
+	 * Checks and updates the form labels, in case they are renamed or deleted.
+	 */
+	public function sync_labels() {
+		// Get the labels from the EM Service.
+		$api_labels = Loader::get_instance()->mailer_api->get_labels();
+
+		// Store them, as arrays, with the ID as the key.
+		$api_label_ids = array();
+		foreach ( $api_labels['data'] as $api_label ) {
+			$api_label_ids[ $api_label['id'] ] = $api_label['name'];
+		}
+
+		// Get all forms we have created.
+		$all_forms = Forms_Post_Type::get_all_forms();
+
+		foreach ( $all_forms as $form ) {
+			// Decode the post content into Object.
+			$body = json_decode( $form->post_content );
+
+			// Get the labels array, stored in the database.
+			if ( ! isset( $body->settings->labels ) || ! is_array( $body->settings->labels ) ) {
+				continue;
+			}
+			$stored_labels = $body->settings->labels;
+
+			// Create a deep copy of the stored labels, that is not passed by reference.
+			$original_labels = json_decode( json_encode( $stored_labels ) );
+
+			$updated_labels = array();
+			foreach ( $stored_labels as $stored_label ) {
+				// Get the ID of the stored label.
+				$id = $stored_label->id;
+
+				// Check if there is an EM Service label with that id.
+				if ( isset( $api_label_ids[ $id ] ) ) {
+					// If the ID exists, then compare the name.
+					if ( $api_label_ids[ $id ] !== $stored_label->name ) {
+						// If the name has changed, update the stored name to the new one.
+						$stored_label->name = $api_label_ids[ $id ];
+					}
+					// Save the updated labels.
+					$updated_labels[] = $stored_label;
+				}
+			}
+
+			// Check for changes, in JSON format.
+			if ( json_encode( $original_labels ) !== json_encode( $updated_labels ) ) {
+				// Assign the updated labels to the settings.
+				$body->settings->labels = $updated_labels;
+
+				// Update the settings in the db.
+				wp_update_post(
+					array(
+						'ID'           => $form->ID,
+						'post_content' => wp_json_encode( $body ),
+					)
+				);
+			}
+		}
+	}
+
 }

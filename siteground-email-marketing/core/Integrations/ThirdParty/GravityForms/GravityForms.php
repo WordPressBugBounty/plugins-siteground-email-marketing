@@ -173,7 +173,7 @@ class GravityForms extends Integrations {
 		}
 
 		$data = array(
-			'labels'    => $this->get_label_ids( $labels ),
+			'labels'    => $labels,
 			'firstName' => $data['first_name'],
 			'lastName'  => $data['last_name'],
 			'email'     => $data['email'],
@@ -182,7 +182,6 @@ class GravityForms extends Integrations {
 		);
 
 		$this->mailer_api->send_data( array( $data ) );
-
 	}
 
 	/**
@@ -200,11 +199,10 @@ class GravityForms extends Integrations {
 			return array();
 		}
 		foreach ( $labels_list['data'] as $label ) {
-			$labels[] = $label['name'];
+			$labels[ $label['id'] ] = $label['name'];
 		}
 
 		return $labels;
-
 	}
 
 	/**

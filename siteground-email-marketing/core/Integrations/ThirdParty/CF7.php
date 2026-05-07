@@ -229,7 +229,7 @@ class CF7 extends \SG_Email_Marketing\Integrations\Integrations {
 		}
 
 		$data = array(
-			'labels'    => $this->get_label_ids( get_post_meta( $cf7_form->id(), self::CF7_SELECTED_LABELS_META, true ) ),
+			'labels'    => get_post_meta( $cf7_form->id(), self::CF7_SELECTED_LABELS_META, true ),
 			'firstName' => $data['first_name'],
 			'lastName'  => $data['last_name'],
 			'email'     => $data['email'],
@@ -357,5 +357,4 @@ class CF7 extends \SG_Email_Marketing\Integrations\Integrations {
 		}
 		return $label_ids;
 	}
-
 }

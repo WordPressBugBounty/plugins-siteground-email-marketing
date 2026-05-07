@@ -181,12 +181,36 @@ class SGWPMAIL_WPForms_Field extends \WPForms_Field {
 
 		$class   = $args['class'];
 		$options = $args['options'];
-		$value   = isset( $args['value'] ) ? $args['value'] : '';
+		$value = '';
+
+		if ( isset( $args['value'] ) ) {
+			$value = $args['value'];
+		}
+
+		if ( '' === $value && isset( $args['attrs']['data-selected'] ) ) {
+			$value = $args['attrs']['data-selected'];
+		}
+
+		// Ensure $value is an array (because it's multi-select).
+		if ( ! is_array( $value ) ) {
+			$value = (array) $value;
+		}
+
 		$output  = sprintf( '<select class="%s" id="wpforms-field-option-%d-%s" name="fields[%d][%s][]" %s>', $class, $id, $slug, $id, $slug, $attrs );
 
 		foreach ( $options as $arg_key => $arg_option ) {
-			$output .= sprintf( '<option value="%s" %s>%s</option>', esc_attr( $arg_key ), selected( $arg_key, $value, false ), $arg_option );
+			// Check if the value (the label id ) is selected.
+			$is_selected = in_array( (string) $arg_key, $value, true );
+
+			// Build the option element
+			$output .= sprintf(
+				'<option value="%s" %s>%s</option>',
+				esc_attr( $arg_key ),
+				$is_selected ? 'selected="selected"' : '',
+				$arg_option
+			);
 		}
+
 		$output .= '</select>';
 		ob_start();
 		include_once \SG_Email_Marketing\DIR . '/templates/WPForms_Checkbox_Scripts.php';
@@ -262,10 +286,9 @@ class SGWPMAIL_WPForms_Field extends \WPForms_Field {
 			return array();
 		}
 		foreach ( $labels_list['data'] as $label ) {
-			$labels[ $label['name'] ] = $label['name'];
+			$labels[ $label['id'] ] = $label['name'];
 		}
 
 		return $labels;
-
 	}
 }
