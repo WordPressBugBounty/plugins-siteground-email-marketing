@@ -88,6 +88,14 @@ class WPForms extends \SG_Email_Marketing\Integrations\Integrations {
 			\SG_Email_Marketing\VERSION,
 			true
 		);
+
+		wp_localize_script(
+			'sg-email-marketing-wp-forms-integration',
+			'sgEmailMarketingWPForms',
+			array(
+				'nonce' => wp_create_nonce( 'sg_email_marketing_wpforms' ),
+			)
+		);
 		wp_enqueue_style(
 			'sg-email-marketing-wpforms-integration',
 			\SG_Email_Marketing\URL . '/assets/css/integrations/wpforms/wpforms-editor.css',
@@ -104,6 +112,8 @@ class WPForms extends \SG_Email_Marketing\Integrations\Integrations {
 	 * @return void
 	 */
 	public function save_form() {
+		check_ajax_referer( 'sg_email_marketing_wpforms', 'nonce' );
+
 		if ( isset( $_POST['form_id'] ) && isset( $_POST['sg_email_marketing_groups'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			update_post_meta( esc_attr( $_POST['form_id'] ), 'sg_email_marketing_groups', json_decode( stripslashes( $_POST['sg_email_marketing_groups'] ) ) ); // phpcs:ignore
 		}

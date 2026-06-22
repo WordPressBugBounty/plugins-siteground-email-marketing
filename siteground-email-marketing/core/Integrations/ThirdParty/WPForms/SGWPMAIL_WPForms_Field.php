@@ -175,7 +175,7 @@ class SGWPMAIL_WPForms_Field extends \WPForms_Field {
 				if ( is_array( $val ) ) {
 					$val = wp_json_encode( $val );
 				}
-				$attrs .= $arg_key . '=\'' . $val . '\'';
+				$attrs .= $arg_key . '=\'' . esc_attr( $val ) . '\'';
 			}
 		}
 

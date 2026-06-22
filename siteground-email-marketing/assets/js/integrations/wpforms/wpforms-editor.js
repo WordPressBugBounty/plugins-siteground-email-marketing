@@ -9,7 +9,8 @@ jQuery('#wpforms-builder').on('wpformsBeforeSave', function($builder) {
     method: 'POST',
     data: {
       'sg_email_marketing_groups' : JSON.stringify( groups_data ),
-      'form_id' : form_id
+      'form_id' : form_id,
+      'nonce' : sgEmailMarketingWPForms.nonce
     }
   });
 });
